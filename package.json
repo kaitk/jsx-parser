@@ -1,5 +1,5 @@
 {
-  "name": "jsx-parser",
+  "name": "next-jsx-parser",
   "version": "0.0.1",
   "description": "A React 18 and Server Component compatible JSX Parser",
   "repository": "git@github.com:kaitk/jsx-parser.git",
