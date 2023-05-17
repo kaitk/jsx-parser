@@ -1,6 +1,6 @@
 {
   "name": "next-jsx-parser",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "A React 18 and Server Component compatible JSX Parser",
   "repository": "git@github.com:kaitk/jsx-parser.git",
   "author": "Kait Kasak",
