@@ -7,6 +7,7 @@ export function JsxParser<T>(props: TProps<T>) {
   return props.renderInWrapper ? (
     <div className="jsx-parser">{parsedChildren}</div>
   ) : (
-    parsedChildren
+    // eslint-disable-next-line react/jsx-no-useless-fragment
+    <>{parsedChildren}</>
   );
 }

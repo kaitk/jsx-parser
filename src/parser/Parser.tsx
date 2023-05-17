@@ -40,6 +40,12 @@ export type TProps<T> = {
 };
 type Scope = Record<string, any>;
 
+function purifyJsxString(jsxString: string) {
+  const output = jsxString?.trim().replace(/<!DOCTYPE([^>]*)>/g, '');
+  // because jsx-parser parses a bunch of \r \n \t into unnecessary <Fragment> components
+  return output?.replace(/\s+/g, ' ').replace(/> </g, '><') ?? '';
+}
+
 // TODO fix types ad add tests they are a mess
 /* eslint-disable consistent-return */
 export default class Parser<T> {
@@ -67,7 +73,7 @@ export default class Parser<T> {
 
   parseJSX = (jsx: string): React.JSX.Element | React.JSX.Element[] | null => {
     const parser = AcornParser.extend((AcornJSX as any)());
-    const wrappedJsx = `<root>${jsx}</root>`;
+    const wrappedJsx = `<root>${purifyJsxString(jsx)}</root>`;
     let parsed: Node[] = [];
     try {
       // @ts-ignore - AcornJsx doesn't have typescript typings
