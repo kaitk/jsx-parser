@@ -1,4 +1,4 @@
-# jsx-parser
+# next-jsx-parser
 
 **Warning: This software is pre-alpha and provided as is**
 
@@ -9,7 +9,7 @@ with minimaly changes to make it work with Server Components (not using deprecat
 
 ### Don't use it yet!
 
-The Only reason for this to exist, is that it works on a small subset of components of an internal app to be rendered as Server Components in a next 13.4 app.
+The Only reason for this to exist, is that it works on a small subset of components of an internal app to be rendered as [Server Components](https://nextjs.org/docs/getting-started/react-essentials#server-components) in a Next.js 13.4 app.
 
 ### TODO
 

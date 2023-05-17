@@ -20,14 +20,14 @@ type ParsedJSX = React.JSX.Element | boolean | string;
 type ParsedTree = ParsedJSX | ParsedJSX[] | null;
 
 // TODO commented out unsupported elements
-export type TProps = {
+export type TProps<T> = {
   // allowUnknownElements?: boolean,
   // autoCloseVoidElements?: boolean,
   bindings?: { [key: string]: unknown };
   blacklistedAttrs?: Array<string | RegExp>;
   blacklistedTags?: string[];
   // className?: string,
-  components?: Record<string, ComponentType | ExoticComponent>;
+  components?: Record<string, ComponentType<T> | ExoticComponent<T>>;
   componentsOnly?: boolean;
   disableFragments?: boolean;
   disableKeyGeneration?: boolean;
@@ -42,8 +42,8 @@ type Scope = Record<string, any>;
 
 // TODO fix types ad add tests they are a mess
 /* eslint-disable consistent-return */
-export default class Parser {
-  static defaultProps: TProps = {
+export default class Parser<T> {
+  static defaultProps: TProps<any> = {
     bindings: {},
     blacklistedAttrs: [/^on.+/i],
     blacklistedTags: ['script'],
@@ -59,9 +59,9 @@ export default class Parser {
     renderUnrecognized: () => null,
   };
 
-  private props: TProps;
+  private props: TProps<T>;
 
-  constructor(props: TProps = Parser.defaultProps) {
+  constructor(props: TProps<T> = Parser.defaultProps) {
     this.props = props;
   }
 
