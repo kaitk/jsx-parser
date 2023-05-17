@@ -15,6 +15,26 @@ with minimaly changes to make it work with Server Components (not using deprecat
 
 Tests and docs will be added later (if at all)
 
+### Linking
+
+Often times you want to `link` the package you're developing to another project locally to test it out to circumvent the need to publish it to NPM.
+
+For pnpm you can just use a realtive path at the TARGET repo:
+
+```console
+pnpm add file: ../next-jsx-parser
+```
+
+For npm/yarn this we use [yalc](https://github.com/wclr/yalc) which is a tool for local package development and simulating the publishing and installation of packages.
+
+In a project where you want to consume your package simply run:
+
+```console
+npx yalc link next-jsx-parser
+# or
+yarn yalc add next-jsx-parser
+```
+
 ### Releasing, tagging & publishing to NPM
 
 Create a semantic version tag and publish to Github Releases. When a new release is detected a Github Action will automatically build the package and publish it to NPM. Additionally, a Storybook will be published to Github pages.
