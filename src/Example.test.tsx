@@ -1,6 +1,6 @@
 import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
-import { Example } from './index';
+import { Example } from './Example';
 
 it('renders correctly', () => {
   render(<Example text="Clicked this many times" />);

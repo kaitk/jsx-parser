@@ -7,12 +7,12 @@ describe('Parser', () => {
       const parser = new Parser();
 
       const parsed = parser.parseJSX(`
-          <p falsyProp={false ? 1 : 0} truthyProp={true ? 1 : 0}>
+          <p falsyprop={false ? 1 : 0} truthyprop={true ? 1 : 0}>
             (display 1: {true ? 1 : 0}); (display 0: {false ? 1 : 0})
           </p>`) as React.JSX.Element[];
 
-      expect(parsed[0].props.truthyProp).toBe(1);
-      expect(parsed[0].props.falsyProp).toBe(0);
+      expect(parsed[0].props.truthyprop).toBe(1);
+      expect(parsed[0].props.falsyprop).toBe(0);
     });
   });
 
@@ -21,25 +21,25 @@ describe('Parser', () => {
       const parser = new Parser();
 
       const parsed = parser.parseJSX(
-        '<p falsyProp={false || "fallback"} truthyProp={true || "fallback"}>' +
+        '<p falsyprop={false || "fallback"} truthyprop={true || "fallback"}>' +
           '(display "good": {"good" || "fallback"}); (display "fallback": {"" || "fallback"})' +
           '</p>'
       ) as React.JSX.Element[];
 
-      expect(parsed[0].props.falsyProp).toBe('fallback');
-      expect(parsed[0].props.truthyProp).toBe(true);
+      expect(parsed[0].props.falsyprop).toBe('fallback');
+      expect(parsed[0].props.truthyprop).toBe(true);
     });
 
     test('should handle evaluative', () => {
       const parser = new Parser({ bindings: { foo: 1 } });
 
       const parsed = parser.parseJSX(
-        `<div truthyProp={foo === 1 || 'fallback'} falseyProp={foo !== 1 || 'fallback'}>
+        `<div truthyprop={foo === 1 || 'fallback'} falseyProp={foo !== 1 || 'fallback'}>
             {foo === 1 || 'trueFallback'}{foo !== 1 || 'falseFallback'}
           </div>`
       ) as React.JSX.Element[];
 
-      expect(parsed[0].props.truthyProp).toBe(true);
+      expect(parsed[0].props.truthyprop).toBe(true);
       expect(parsed[0].props.falseyProp).toBe('fallback');
     });
   });

@@ -8,7 +8,7 @@ describe('Parser', () => {
       render(
         <JsxParser
           jsx={`
-          <p falsyProp={false ? 1 : 0} truthyProp={true ? 1 : 0}>
+          <p falsyprop={false ? 1 : 0} truthyprop={true ? 1 : 0}>
             (display 1: {true ? 1 : 0}); (display 0: {false ? 1 : 0})
           </p>`}
         />
@@ -44,7 +44,7 @@ describe('Parser', () => {
       render(
         <JsxParser
           jsx={
-            '<p falsyProp={false || "fallback"} truthyProp={true || "fallback"}>' +
+            '<p falsyprop={false || "fallback"} truthyprop={true || "fallback"}>' +
             '(display "good": {"good" || "fallback"}); (display "fallback": {"" || "fallback"})' +
             '</p>'
           }
@@ -63,7 +63,7 @@ describe('Parser', () => {
         <JsxParser
           bindings={{ foo: 1 }}
           jsx={`
-            <div truthyProp={foo === 1 || 'fallback'} falseyProp={foo !== 1 || 'fallback'}>
+            <div truthyprop={foo === 1 || 'fallback'} falsyprop={foo !== 1 || 'fallback'}>
               {foo === 1 || 'trueFallback'}{foo !== 1 || 'falseFallback'}
             </div>
           `}

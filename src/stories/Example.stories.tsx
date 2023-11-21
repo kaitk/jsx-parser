@@ -1,7 +1,7 @@
 import React from 'react';
 import { Meta, StoryFn } from '@storybook/react';
 
-import { Example } from '..';
+import { Example } from '../Example';
 
 export default {
   title: 'Example',
