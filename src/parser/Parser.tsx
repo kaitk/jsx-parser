@@ -80,7 +80,7 @@ export default class Parser<T> {
     const parser = AcornParser.extend((AcornJSX as any)());
     const wrappedJsx = `<root>${purifyJsxString(
       jsx,
-      this.props.stripNewlines || true
+      this.props.stripNewlines ?? true
     )}</root>`;
     let parsed: Node[] = [];
     try {
