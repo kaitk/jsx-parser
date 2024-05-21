@@ -9,7 +9,7 @@ import type {
 import { Node, Parser as AcornParser } from 'acorn';
 
 import AcornJSX from 'acorn-jsx';
-import React, { Fragment, ComponentType, ExoticComponent } from 'react';
+import React, { ComponentType, ExoticComponent, Fragment } from 'react';
 import ATTRIBUTES from './constants/attributeNames';
 import { canHaveChildren, canHaveWhitespace } from './constants/specialTags';
 import { randomHash } from './helpers/hash';
@@ -37,13 +37,17 @@ export type TProps<T> = {
   renderInWrapper?: boolean;
   renderUnrecognized?: (tagName: string) => React.JSX.Element | null;
   showWarnings?: boolean;
+  stripNewlines?: boolean;
 };
 type Scope = Record<string, any>;
 
-function purifyJsxString(jsxString: string) {
+function purifyJsxString(jsxString: string, stripNewlines: boolean) {
   const output = jsxString?.trim().replace(/<!DOCTYPE([^>]*)>/g, '');
   // because jsx-parser parses a bunch of \r \n \t into unnecessary <Fragment> components
-  return output?.replace(/\s+/g, ' ').replace(/> </g, '><') ?? '';
+  if (stripNewlines) {
+    return output?.replace(/\s+/g, ' ').replace(/> </g, '><') ?? '';
+  }
+  return output;
 }
 
 // TODO fix types ad add tests they are a mess
@@ -62,6 +66,7 @@ export default class Parser<T> {
     showWarnings: false,
     renderError: undefined,
     renderInWrapper: true,
+    stripNewlines: true,
     renderUnrecognized: () => null,
   };
 
@@ -73,7 +78,10 @@ export default class Parser<T> {
 
   parseJSX = (jsx: string): React.JSX.Element | React.JSX.Element[] | null => {
     const parser = AcornParser.extend((AcornJSX as any)());
-    const wrappedJsx = `<root>${purifyJsxString(jsx)}</root>`;
+    const wrappedJsx = `<root>${purifyJsxString(
+      jsx,
+      this.props.stripNewlines || true
+    )}</root>`;
     let parsed: Node[] = [];
     try {
       // @ts-ignore - AcornJsx doesn't have typescript typings
@@ -81,8 +89,13 @@ export default class Parser<T> {
       // @ts-ignore - AcornJsx doesn't have typescript typings
       parsed = parsed.body[0].expression.children || [];
     } catch (error) {
-      if (this.props.showWarnings) console.warn(error); // eslint-disable-line no-console
-      if (this.props.onError) this.props.onError(error as Error);
+      if (this.props.showWarnings) {
+        // eslint-disable-next-line no-console
+        console.warn(error);
+      } // eslint-disable-line no-console
+      if (this.props.onError) {
+        this.props.onError(error as Error);
+      }
       if (this.props.renderError) {
         return this.props.renderError({ error: String(error) });
       }
@@ -97,7 +110,9 @@ export default class Parser<T> {
     // eslint-disable-next-line default-case
     switch (expression.type) {
       case 'JSXAttribute':
-        if (expression.value === null) return true;
+        if (expression.value === null) {
+          return true;
+        }
         return this.parseExpression(expression.value, scope);
       case 'JSXElement':
       case 'JSXFragment':
@@ -226,7 +241,9 @@ export default class Parser<T> {
       case 'LogicalExpression':
         // eslint-disable-next-line no-case-declarations
         const left = this.parseExpression(expression.left);
-        if (expression.operator === '||' && left) return left;
+        if (expression.operator === '||' && left) {
+          return left;
+        }
         if (
           (expression.operator === '&&' && left) ||
           (expression.operator === '||' && !left)
@@ -250,7 +267,9 @@ export default class Parser<T> {
       case 'TemplateLiteral':
         return [...expression.expressions, ...expression.quasis]
           .sort((a, b) => {
-            if (a.start < b.start) return -1;
+            if (a.start < b.start) {
+              return -1;
+            }
             return 1;
           })
           .map((item) => this.parseExpression(item))
@@ -311,7 +330,9 @@ export default class Parser<T> {
         parent = value;
         return value[next];
       }, target);
-      if (typeof member === 'function') return member.bind(parent);
+      if (typeof member === 'function') {
+        return member.bind(parent);
+      }
 
       return member;
     } catch {
